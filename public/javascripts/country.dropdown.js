@@ -1,5 +1,11 @@
 const dropDown = document.getElementById('country');
 
+// ***************************************************************** 
+//  This is not a correct implementation, is just for demostrations purpose
+//  I'm not very familiar with Pug, and it's very complicated to manipulate the DOM
+//  directly. 
+// ***************************************************************** 
+
 dropDown.addEventListener('click', function(){    
     const videoDesc = 1;
     const cardImgContainer = 0;
