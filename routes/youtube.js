@@ -12,19 +12,26 @@ const service = new YoutubeService(axios);
 
 /* GET home page. */
 router.get('/', async (req, res) => {
-  // const trends = await service.getTrendingVideos();
-  console.log('-------------------ENTERRR');
+  const defaultCountry = 'US';
+  const trends = await service.getTrendingVideos(defaultCountry);
   res.render('youtube/index', {
     title: config.title,
     countryList: config.countryList,
-    // videos: trends
+    videos: trends
   });
 });
 
 router.get('/:videoId', async (req, res) => {
   res.render('youtube/player', {
-    title: config.title
+    title: config.title,
+    countryList: config.countryList
   });
+});
+
+router.get('/for/:countryId', async (req, res) => {
+  const countryId = req.params.countryId;
+  const trends = await service.getTrendingVideos(countryId);
+  res.json(trends);
 });
 
 module.exports = router;
