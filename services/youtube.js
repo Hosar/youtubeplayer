@@ -45,10 +45,9 @@ export class YoutubeService {
   }
 
   getDetails(videosInfo) {
-      const ctx = this;
       const videosWithDetails = videosInfo.map(video => {
-        const getCountsDetails = (_video) => new Promise(function(resolve, reject) {
-          ctx.getVideoCounts(_video.id).then(counts => {
+        const getCountsDetails = (_video) => new Promise((resolve, reject) => {
+          this.getVideoCounts(_video.id).then(counts => {
             const videoWithCountsInfo = Object.assign({}, _video, counts) 
             resolve(videoWithCountsInfo)
           }).catch(reject);          

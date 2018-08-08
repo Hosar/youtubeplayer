@@ -1,8 +1,9 @@
 import Axios from 'axios';
 import * as config from '../../config.json';
 import { YoutubeService } from '../../services';
-import { fakeTrendingResponse, fakeStadistics } from '../fakeVideo';
+import { fakeTrendingResponse, fakeStadistics, fakeVideo } from '../fakeVideo';
 import { expect } from 'chai';
+import moment from "moment";
 import sinon from 'sinon';
 
 describe('Youtube service unit test', () => {
@@ -22,6 +23,9 @@ describe('Youtube service unit test', () => {
 
     before(() => {
         axios.get = sinon.stub();
+        const threeDaysBefore = moment().subtract('3','days');
+        fakeTrendingResponse.data.items[0].snippet.publishedAt = threeDaysBefore;
+        fakeVideo[0].snippet.publishedAt = threeDaysBefore;
         axios.get.withArgs('/', { params: trendingVideos }).returns(Promise.resolve(fakeTrendingResponse));
         axios.get.withArgs('/', { params: stadistics }).returns(Promise.resolve(fakeStadistics));
 
@@ -42,6 +46,20 @@ describe('Youtube service unit test', () => {
             expect(videoInfoExpected).to.deep.equal(firstVideo);
             done();
         }).catch(done);
-
     });
+
+    it('should format the video info to hold only the necessaty info', () => {
+        const youtubeSerive = new YoutubeService(axios);        
+        const videoInfo = youtubeSerive.formatVideoItems(fakeVideo)
+        const propertiesExpected = 4;
+        const videoInfoExpected = {
+            id: 'DRS_PpOrUZ4',
+            title: 'Drake - In My Feelings',
+            thumbnail: 'https://i.ytimg.com/vi/DRS_PpOrUZ4/hqdefault.jpg',
+            publishedAt: '3 days ago'
+        };
+        const firstVideo = videoInfo[0];
+        expect(Object.getOwnPropertyNames(firstVideo).length).to.equal(propertiesExpected)
+        expect(firstVideo).to.deep.equal(videoInfoExpected);
+    })    
 });

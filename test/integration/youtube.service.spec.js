@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import * as config from '../../config.json';
 import { YoutubeService } from '../../services';
-import { fakeVideo } from '../fakeVideo';
 import { expect } from 'chai'
 
 describe('Youtube service', () => {
@@ -25,22 +24,7 @@ describe('Youtube service', () => {
             expect(videosTrending.data.items.length).to.greaterThan(0);
             done();
         }).catch(done);
-    });
-
-    it('should format the video info to hold only the necessaty info', () => {
-        const youtubeSerive = new YoutubeService(axios);
-        const videoInfo = youtubeSerive.formatVideoItems(fakeVideo)
-        const propertiesExpected = 4;
-        const videoInfoExpected = {
-            id: 'DRS_PpOrUZ4',
-            title: 'Drake - In My Feelings',
-            thumbnail: 'https://i.ytimg.com/vi/DRS_PpOrUZ4/hqdefault.jpg',
-            publishedAt: '3 days ago'
-        };
-        const firstVideo = videoInfo[0];
-        expect(Object.getOwnPropertyNames(firstVideo).length).to.equal(propertiesExpected)
-        expect(firstVideo).to.deep.equal(videoInfoExpected);
-    })
+    });    
 
     it('should get the video counts', (done) => {
         const videoInfo = [{
